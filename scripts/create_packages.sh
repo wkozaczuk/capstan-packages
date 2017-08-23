@@ -5,6 +5,7 @@ OSV_ROOT=/home/wkozaczuk/projects/waldek-osv
 PACKAGES=/home/wkozaczuk/projects/waldek-capstan-packages2/packages
 CAPSTAN=/home/wkozaczuk/projects/mikelangelo-capstan/capstan
 CAPSTAN_LOCAL_REPO=/home/wkozaczuk/.capstan
+S3_REPO_URL="s3://wkozaczuk-capstan-repo"
 
 OSV_BUILD=$OSV_ROOT/build/release
 
@@ -36,6 +37,16 @@ prepare_package() {
 build_or_import_package() {
   package_name="$1"
   cd $PACKAGES/$package_name && $CAPSTAN package $PACKAGE_BUILD_OR_IMPORT
+  if [ $PACKAGE_BUILD_OR_IMPORT == "import" ]
+  then
+    upload_package_to_S3 $package_name
+  fi
+}
+
+upload_package_to_S3() {
+  package_name="$1"
+  aws s3 cp $CAPSTAN_LOCAL_REPO/packages/${package_name}.mpm ${S3_REPO_URL}/packages/${package_name}.mpm
+  aws s3 cp $CAPSTAN_LOCAL_REPO/packages/${package_name}.yaml ${S3_REPO_URL}/packages/${package_name}.yaml
 }
 
 build_osv_loader_and_boostrap_package() {
@@ -47,6 +58,7 @@ build_osv_loader_and_boostrap_package() {
   cp $OSV_BUILD/loader.img $PACKAGES/osv.loader/osv-loader.qemu
   mkdir -p $CAPSTAN_LOCAL_REPO/repository/mike/osv-loader/
   cp $PACKAGES/osv.loader/osv-loader.qemu $CAPSTAN_LOCAL_REPO/repository/mike/osv-loader/
+  aws s3 cp $CAPSTAN_LOCAL_REPO/repository/mike/osv-loader/osv-loader.qemu ${S3_REPO_URL}/mike/osv-loader/osv-loader.qemu
 
   #Create bootstrap package
   prepare_package "osv.bootstrap" "OSv Bootstrap" "0.0.1"
@@ -132,7 +144,7 @@ build_lighttpd() {
   build_or_import_package "osv.lighttpd"
 }
 
-clean_osv
+#clean_osv
 
 build_osv_loader_and_boostrap_package
 build_run_java_packages
