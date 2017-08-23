@@ -2,7 +2,7 @@
 PACKAGE_BUILD_OR_IMPORT=${1-build}
 
 OSV_ROOT=/home/wkozaczuk/projects/waldek-osv
-PACKAGES=/home/wkozaczuk/projects/waldek-capstan-packages
+PACKAGES=/home/wkozaczuk/projects/waldek-capstan-packages2/packages
 CAPSTAN=/home/wkozaczuk/projects/mikelangelo-capstan/capstan
 CAPSTAN_LOCAL_REPO=/home/wkozaczuk/.capstan
 
@@ -132,19 +132,20 @@ build_lighttpd() {
   build_or_import_package "osv.lighttpd"
 }
 
-#clean_osv
-#build_osv_loader_and_boostrap_package
+clean_osv
+
+build_osv_loader_and_boostrap_package
 build_run_java_packages
-#build_openjdk8-compact_profile_package 1 "8.0.144" #Should be identified automatically
-#build_openjdk8-zulu-compact3-with-java-beans_package "8.0.144"
-#build_openjdk8-full_package "8.0.144"
+build_openjdk8-compact_profile_package 1 "8.0.144" #Should be identified automatically
+build_openjdk8-zulu-compact3-with-java-beans_package "8.0.144"
+build_openjdk8-full_package "8.0.144"
 
-#build_httpserver_api_package
-#uild_httpserver_html5_gui_package
-#uild_httpserver_html5_cli_package
+build_httpserver_api_package
+build_httpserver_html5_gui_package
+build_httpserver_html5_cli_package
 
-#build_node_package
-#build_lighttpd
+build_node_package
+build_lighttpd
 
 #TODO - Java 9, nginx, 
 #Moze - python, ruby, erlang
