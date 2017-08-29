@@ -86,6 +86,7 @@ build_openjdk8-compact_profile_package() {
   build_osv "openjdk8-zulu-compact$profile" selected none
   prepare_package "$package_name" "Zulu Open JDK 8 compact profile $profile1" "$version"
   cd $PACKAGES/${package_name}/usr/lib/jvm/ && rm jre && rmdir java && ln -s j2re-compact${profile}-image/jre jre
+  cd $PACKAGES/${package_name} && cp $OSV_ROOT/modules/ca-certificates/build/etc/pki/ca-trust/extracted/java/cacerts usr/lib/jvm/jre/lib/security/
   build_or_import_package "$package_name"
 }
 
@@ -95,6 +96,7 @@ build_openjdk8-full_package() {
   build_osv "openjdk8-zulu-full" selected none
   prepare_package "$package_name" "Zulu Open JDK 8" "$version"
   #cd $PACKAGES/osv.openjdk8-zulu-full/usr/lib/jvm/ && rm jre && rmdir java && ln -s j2re-compact${profile}-image/jre jre
+  cd $PACKAGES/${package_name} && cp $OSV_ROOT/modules/ca-certificates/build/etc/pki/ca-trust/extracted/java/cacerts usr/lib/jvm/jre/lib/security/
   build_or_import_package "$package_name"
 }
 
@@ -104,6 +106,7 @@ build_openjdk8-zulu-compact3-with-java-beans_package() {
   build_osv "openjdk8-zulu-compact3-with-java-beans" selected none
   prepare_package "$package_name" "Zulu Open JDK 8 with java.beans" "$version"
   cd $PACKAGES/${package_name}/usr/lib/jvm/ && rm jre && rmdir java && ln -s j2re-compact3-with-java-beans-image/jre jre
+  cd $PACKAGES/${package_name} && cp $OSV_ROOT/modules/ca-certificates/build/etc/pki/ca-trust/extracted/java/cacerts usr/lib/jvm/jre/lib/security/
   build_or_import_package "$package_name"
 }
 
@@ -144,20 +147,27 @@ build_lighttpd() {
   build_or_import_package "osv.lighttpd"
 }
 
+build_nginx() {
+  build_osv "nginx" all none
+  prepare_package "osv.nginx" "nginx" "1.12.1"
+  build_or_import_package "osv.nginx"
+}
+
 #clean_osv
 
-build_osv_loader_and_boostrap_package
-build_run_java_packages
-build_openjdk8-compact_profile_package 1 "8.0.144" #Should be identified automatically
-build_openjdk8-zulu-compact3-with-java-beans_package "8.0.144"
-build_openjdk8-full_package "8.0.144"
+#build_osv_loader_and_boostrap_package
+#build_run_java_packages
+#build_openjdk8-compact_profile_package 1 "8.0.144" #Should be identified automatically
+#build_openjdk8-zulu-compact3-with-java-beans_package "8.0.144"
+#build_openjdk8-full_package "8.0.144"
 
-build_httpserver_api_package
-build_httpserver_html5_gui_package
-build_httpserver_html5_cli_package
+#build_httpserver_api_package
+#build_httpserver_html5_gui_package
+#build_httpserver_html5_cli_package
 
-build_node_package
-build_lighttpd
+#build_node_package
+#build_lighttpd
+build_nginx
 
 #TODO - Java 9, nginx, 
 #Moze - python, ruby, erlang
