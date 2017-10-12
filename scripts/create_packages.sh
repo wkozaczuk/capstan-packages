@@ -1,12 +1,7 @@
 #!/bin/bash
 PACKAGE_BUILD_OR_IMPORT=${1-build}
 
-OSV_ROOT=/home/wkozaczuk/projects/waldek-osv
-PACKAGES=/home/wkozaczuk/projects/waldek-capstan-packages2/packages
-CAPSTAN=/home/wkozaczuk/projects/mikelangelo-capstan/capstan
-CAPSTAN_LOCAL_REPO=/home/wkozaczuk/.capstan
-S3_REPO_URL="s3://wkozaczuk-capstan-repo"
-
+source $(dirname $0)/env.h
 OSV_BUILD=$OSV_ROOT/build/release
 
 clean_osv() {
@@ -45,8 +40,8 @@ build_or_import_package() {
 
 upload_package_to_S3() {
   package_name="$1"
-  aws s3 cp $CAPSTAN_LOCAL_REPO/packages/${package_name}.mpm ${S3_REPO_URL}/packages/${package_name}.mpm
-  aws s3 cp $CAPSTAN_LOCAL_REPO/packages/${package_name}.yaml ${S3_REPO_URL}/packages/${package_name}.yaml
+  aws ${AWS_PROFILE} s3 cp $CAPSTAN_LOCAL_REPO/packages/${package_name}.mpm ${S3_REPO_URL}/packages/${package_name}.mpm
+  aws ${AWS_PROFILE} s3 cp $CAPSTAN_LOCAL_REPO/packages/${package_name}.yaml ${S3_REPO_URL}/packages/${package_name}.yaml
 }
 
 build_osv_loader_and_boostrap_package() {
@@ -58,7 +53,7 @@ build_osv_loader_and_boostrap_package() {
   cp $OSV_BUILD/loader.img $PACKAGES/osv.loader/osv-loader.qemu
   mkdir -p $CAPSTAN_LOCAL_REPO/repository/mike/osv-loader/
   cp $PACKAGES/osv.loader/osv-loader.qemu $CAPSTAN_LOCAL_REPO/repository/mike/osv-loader/
-  aws s3 cp $CAPSTAN_LOCAL_REPO/repository/mike/osv-loader/osv-loader.qemu ${S3_REPO_URL}/mike/osv-loader/osv-loader.qemu
+  aws ${AWS_PROFILE} s3 cp $CAPSTAN_LOCAL_REPO/repository/mike/osv-loader/osv-loader.qemu ${S3_REPO_URL}/mike/osv-loader/osv-loader.qemu
 
   #Create bootstrap package
   prepare_package "osv.bootstrap" "OSv Bootstrap" "0.0.1"
@@ -155,18 +150,18 @@ build_nginx() {
 
 #clean_osv
 
-#build_osv_loader_and_boostrap_package
-#build_run_java_packages
-#build_openjdk8-compact_profile_package 1 "8.0.144" #Should be identified automatically
-#build_openjdk8-zulu-compact3-with-java-beans_package "8.0.144"
-#build_openjdk8-full_package "8.0.144"
+build_osv_loader_and_boostrap_package
+build_run_java_packages
+build_openjdk8-compact_profile_package 1 "8.0.144" #Should be identified automatically
+build_openjdk8-zulu-compact3-with-java-beans_package "8.0.144"
+build_openjdk8-full_package "8.0.144"
 
-#build_httpserver_api_package
-#build_httpserver_html5_gui_package
-#build_httpserver_html5_cli_package
+build_httpserver_api_package
+build_httpserver_html5_gui_package
+build_httpserver_html5_cli_package
 
-#build_node_package
-#build_lighttpd
+build_node_package
+build_lighttpd
 build_nginx
 
 #TODO - Java 9, nginx, 
