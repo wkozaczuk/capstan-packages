@@ -1,7 +1,7 @@
 #!/bin/bash
 PACKAGE_BUILD_OR_IMPORT=${1-build}
 
-source $(dirname $0)/env.h
+source $(dirname $0)/env.sh
 OSV_BUILD=$OSV_ROOT/build/release
 
 clean_osv() {
