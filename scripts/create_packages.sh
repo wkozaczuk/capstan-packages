@@ -152,17 +152,17 @@ build_nginx() {
 
 build_osv_loader_and_boostrap_package
 build_run_java_packages
-build_openjdk8-compact_profile_package 1 "8.0.144" #Should be identified automatically
-build_openjdk8-zulu-compact3-with-java-beans_package "8.0.144"
-build_openjdk8-full_package "8.0.144"
+#build_openjdk8-compact_profile_package 1 "8.0.144" #Should be identified automatically
+#build_openjdk8-zulu-compact3-with-java-beans_package "8.0.144"
+#build_openjdk8-full_package "8.0.144"
 
 build_httpserver_api_package
-build_httpserver_html5_gui_package
-build_httpserver_html5_cli_package
+#build_httpserver_html5_gui_package
+#build_httpserver_html5_cli_package
 
-build_node_package
-build_lighttpd
-build_nginx
+#build_node_package
+#build_lighttpd
+#build_nginx
 
 #TODO - Java 9, nginx, 
 #Moze - python, ruby, erlang
